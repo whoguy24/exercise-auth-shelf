@@ -17,25 +17,19 @@ function* fetchShelf(action) {
   }
 }
 
-// function* createSnack(action) {
-//   console.log('createSnacks action:', action);
-//   // POST the new snack
-//   const response = yield axios({
-//     method: 'POST',
-//     url: '/api/snacks',
-//     data: {
-//       name: action.payload
-//     }
-//   })
-//   // Re-ren the fetchPets function
-//   yield put({ type: 'FETCH_SNACKS' })
-
-// }
-
+function* addItem(action) {
+  console.log('addItem action:', action);
+  const response = yield axios({
+    method: 'POST',
+    url: '/api/shelf',
+    data: action.payload
+  })
+  yield put({ type: 'FETCH_SHELF' })
+}
 
 function* shelfSaga() {
   yield takeEvery('FETCH_SHELF', fetchShelf);
-//   yield takeEvery('CREATE_SNACK', createSnack);
+  yield takeEvery('ADD_ITEM', addItem);
 }
 
 export default shelfSaga;

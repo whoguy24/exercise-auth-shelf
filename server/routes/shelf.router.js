@@ -21,8 +21,30 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 /**
  * Add an item for the logged in user to the shelf
  */
-router.post('/', (req, res) => {
-  // endpoint functionality
+ router.post('/', rejectUnauthenticated, (req, res) => {
+  console.log('/shelf POST route');
+  console.log(req.body);
+  console.log('is authenticated?', req.isAuthenticated());
+  console.log('user', req.user);
+  const sqlText = `
+    INSERT INTO "item"
+      ("description", "image_url", "user_id")
+      VALUES
+      ($1, $2, $3);
+  `;
+  const sqlValues = [
+    req.body.description,
+    req.body.image_url,
+    req.user.id
+  ];
+  pool.query(sqlText, sqlValues)
+    .then((dbRes) => {
+      res.sendStatus(201);
+    })
+    .catch((dbErr) => {
+      console.error(dbErr);
+      res.sendStatus(500);
+    });
 });
 
 /**

@@ -12,15 +12,42 @@ function ShelfPage() {
 
   // BITS OF LOCAL STATE
   const [description, setDescription] = useState('');
-  const [imageUrl, setUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   // RUN ON PAGE LOAD
   useEffect(() => {
     dispatch({ type: 'FETCH_SHELF' })
   }, [])
 
+  const onAddItem = (event) => {
+    event.preventDefault();
+    dispatch({
+      type: 'ADD_ITEM',
+      payload: {
+        description: description,
+        image_url: imageUrl
+      }
+    })
+  }
+
   return (
     <div className="container">
+
+      <h1>Add an Item to the Shelf:</h1>
+      <form onSubmit={onAddItem}>
+        <input
+          placeholder="Item Description"
+          value={description}
+          onChange={(event) => setDescription(event.target.value)}
+        />
+        <input
+          placeholder="Item Image URL"
+          value={imageUrl}
+          onChange={(event) => setImageUrl(event.target.value)}
+        />
+        <button>Add Item</button>
+      </form>
+
       <h2>Shelf</h2>
       <ul>
         {shelf.map((shelfItem) => {
