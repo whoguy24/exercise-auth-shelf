@@ -9,6 +9,7 @@ function ShelfPage() {
 
   // REDUX REDUCER
   const shelf = useSelector(store => store.shelf)
+  const user = useSelector(store => store.user)
 
   // BITS OF LOCAL STATE
   const [description, setDescription] = useState('');
@@ -27,6 +28,13 @@ function ShelfPage() {
         description: description,
         image_url: imageUrl
       }
+    })
+  }
+
+  function deleteItem(itemID) {
+    dispatch({
+      type: 'DELETE_ITEM',
+      payload: itemID
     })
   }
 
@@ -51,7 +59,10 @@ function ShelfPage() {
       <h2>Shelf</h2>
       <ul>
         {shelf.map((shelfItem) => {
-          return <li key={shelfItem.id}>{shelfItem.description}</li>
+          return (
+            <li key={shelfItem.id}>{shelfItem.description} 
+            { shelfItem.user_id === user.id && <button onClick={() => { deleteItem(shelfItem.id) }}>Delete</button>}</li>
+          )
         })}
       </ul>
     </div>

@@ -50,8 +50,21 @@ const { rejectUnauthenticated } = require('../modules/authentication-middleware'
 /**
  * Delete an item if it's something the logged in user added
  */
-router.delete('/:id', (req, res) => {
-  // endpoint functionality
+ router.delete('/:id', (req, res) => {
+  const query = `
+      DELETE FROM "item"
+      WHERE "item"."id"=$1;
+  `;
+  const sqlValues = [req.params.id]
+  console.log(query);
+pool.query(query, sqlValues)
+  .then( result => {
+    res.sendStatus(202)
+  })
+  .catch(err => {
+    console.log('ERROR: DELETE request failed:', err);
+    res.sendStatus(500)
+  })
 });
 
 /**
